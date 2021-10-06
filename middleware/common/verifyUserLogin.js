@@ -20,4 +20,14 @@ const checkUserLogin = (req, res, next) => {
     }
 };
 
-module.exports = { checkUserLogin };
+const requiredRole = (role) => (req, res, next) => {
+    if (req.user.role === role.includes(req.user.role)) {
+        next();
+    } else {
+        res.status(401).json({
+            msg: 'Unauthorizes user',
+        });
+    }
+};
+
+module.exports = { checkUserLogin, requiredRole };

@@ -6,6 +6,8 @@ const cookieParser = require('cookie-parser');
 const { notFound, errorHandler } = require('./middleware/common/error');
 const productRouter = require('./router/productRouter');
 const authRouter = require('./router/authRouter');
+const cartRouter = require('./router/cartRouter');
+// const orderRouter = require('./router/orderRouter');
 
 const app = express();
 dotenv.config();
@@ -22,8 +24,10 @@ app.use(express.json());
 app.use(cookieParser(process.env.COOKIE_SECRET));
 
 // router setup
-app.use('/api', productRouter);
-app.use('/api', authRouter);
+app.use('/api/product', productRouter);
+app.use('/api/user', authRouter);
+app.use('/api/cart', cartRouter);
+// app.use('/api/order', orderRouter);
 
 // not found handler
 app.use(notFound);
