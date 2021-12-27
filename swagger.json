@@ -1,0 +1,260 @@
+{
+
+    "openapi": "3.0.1",
+    "info": {
+        "title": "organic-shop API",
+        "description": "This is an e-commerce API",
+        "version": "1.0",
+        "contact": {
+            "email": "mjhasan38@gmail.com"
+        }
+    },
+    "servers":[{
+        "url": "http://localhost:3000/api"
+        }
+    ],
+    "paths": {
+        "/auth/signup":{
+            "post": {
+              "tags": ["Auth"],
+                "requestBody":{
+                    "description": "Post json like below",
+                    "content":{
+                        "application/json":{
+                            "schema": {
+                                "type": "object",
+                                "properties":{
+                                  "name":{
+                                      "type": "string",
+                                      "example": "abc"
+                                  },
+                                     "email":{
+                                         "type": "string",
+                                         "example": "abc@gmail.com"
+                                     },
+                                     "mobile":{
+                                      "type": "string",
+                                      "example": "01777777111"
+                                  },
+                                     "password":{
+                                         "type": "string"
+                                     }
+                                }
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "user signup",
+                        "content": {
+                            "success": {
+                                "example":{
+                                    "msg": "user signup successfull",
+                                    "errors": []
+                                }
+                               
+                            }
+                        }
+                    },
+                    "500":{
+                        "description": "Internal server error",
+                        "content": {
+                            "Server_Error":{
+                                "example":{
+                                    "msg":"Internal server error"
+                                }
+                            }
+                        }
+                    }
+                }      
+            }
+        },
+        "/auth/login":{
+          "post": {
+              "tags": ["Auth"],
+              "requestBody":{
+                  "description": "Post json like below",
+                  "content":{
+                      "application/json":{
+                          "schema": {
+                              "type": "object",
+                              "properties":{
+                                   "email":{
+                                       "type": "string",
+                                       "example": "abc@gmail.com"
+                                   },
+                                   "password":{
+                                       "type": "string"
+                                   }
+                              }
+                          }
+                      }
+                  },
+                  "required": true
+              },
+              "responses": {
+                  "200": {
+                      "description": "Login successfull",
+                       "headers": {
+                          "Set-Cookie": {
+                           "schema":{ 
+                             "type":"string"
+                      }
+                  }
+              },
+                      "content": {
+                          "success": {
+                              "example":{
+                                  "msg": "Login successfull",
+                                   "errors": []
+                              }
+                          }
+                      }
+                  },
+                  "500":{
+                      "description": "Internal server error",
+                      "content": {
+                          "Server_Error":{
+                              "example":{
+                                  "msg":"Internal server error"
+                              }
+                          }
+                      }
+                  }
+              }      
+          }
+        },
+        "/product":{
+            "post":{
+                "tags": ["Product"],
+                "summary": "Add product",
+                "security":[{
+                    "cookieAuth": []
+                }],
+                "requestBody": {
+                    "description": "Post json like below",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                               "$ref": "#/components/schemas/Product"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses":{
+                    "200":{
+                        "description": "success",
+                        "content":{
+                            "Success":{
+                                "example": {
+                                    "msg": "Product added successfully"
+                                }
+                            }
+                        }
+                    },
+                    "401":{
+                        "description": "Autherization error",
+                        "content":{
+                            "UNATHERIZED": {
+                                "example":{
+                                    "msg": "Authentication failed"
+                                }
+                            }
+                        }
+                    },
+                    "500":{
+                      "description": "Internal server error",
+                      "content": {
+                          "Server_Error":{
+                              "example":{
+                                  "msg":"Internal server error"
+                              }
+                          }
+                      }
+                  }
+                }
+            },
+            "get": {
+                "tags": ["Product"],
+                "summary":"Get product",
+                "security": [{
+                    "cookieAuth": []
+                }],
+                "responses":{ 
+                    "200": {
+                        "description": "success",
+                        "content":{
+                           "application/json": {
+                               "schema": {
+                                   "type":"array",
+                                   "items": {
+                                    "$ref":"#/components/schemas/Product"
+                                   }
+                                 
+                               }
+                           }
+                        }
+                    },
+                    "401":{
+                      "description": "Autherization error",
+                      "content":{
+                          "UNATHERIZED": {
+                              "example":{
+                                  "msg": "Authentication failed"
+                              }
+                          }
+                      }
+                  },
+                  "500":{
+                    "description": "Internal server error",
+                    "content": {
+                        "Server_Error":{
+                            "example":{
+                                "msg":"Internal server error"
+                            }
+                        }
+                    }
+                 }
+              }
+           }
+        }
+     },
+     
+     "components": {
+      "schemas":{
+          "Product": {
+              "type": "object",
+              "required": ["title","price","brand","category"],
+              "properties":{
+                  "title":{
+                      "type":"string",
+                      "example":"Hornet 160R"
+                  },
+                  "description":{
+                      "type":"string"
+                  },
+                  "price":{
+                      "type": "number"
+                  },
+                  "brand":{
+                      "type":"string"
+                  },
+                  "category":{
+                      "type":"string"
+                  }
+              }   
+          }
+          
+      }, 
+      "securitySchemes":{
+          "cookieAuth":{
+              "type": "apiKey",
+              "in": "cookie",
+              "name": "jahid-organicShop"
+          }
+      }
+  }
+  }

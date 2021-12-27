@@ -8,9 +8,11 @@ const {
     doProductValidationHandler,
 } = require('../middleware/product/productValidator');
 
-router.get('/', getProduct);
+const {checkUserLogin} = require('../middleware/common/verifyUserLogin');
 
-router.post('/', doProductValidator, doProductValidationHandler, addProduct);
+router.get('/', checkUserLogin, getProduct);
 
-router.delete('/:id', deleteProduct);
+router.post('/',checkUserLogin, doProductValidator, doProductValidationHandler, addProduct);
+
+router.delete('/:id',checkUserLogin, deleteProduct);
 module.exports = router;
